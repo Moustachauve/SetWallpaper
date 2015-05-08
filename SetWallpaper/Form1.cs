@@ -143,7 +143,7 @@ namespace SetWallpaper
             if (File.Exists(path))
                 File.Delete(path);
 
-            logViewer.WriteLine(e.Image, "New wallpaper received (" + e.Style + "):");
+            logViewer.WriteLine("New wallpaper received (" + e.Style + ")");
 
             e.Image.Save(path);
             e.Image.Dispose();

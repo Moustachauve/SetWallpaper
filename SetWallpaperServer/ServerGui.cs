@@ -114,7 +114,7 @@ namespace SetWallpaperServer
 
         private void OnWallpaperReceived(WallpaperReceivedArgs e)
         {
-            logViewer.WriteLine(e.Image, "New image received (" + e.Style + "):");
+            logViewer.WriteLine("New image received (" + e.Style + ")");
         }
 
         #endregion
