@@ -163,6 +163,10 @@ namespace NetworkCore
 
 			e.Client.Tag = new User(clientIp);
 
+
+			byte[] data = new byte[1];
+			data[0] = (byte)CommandType.UserJoined;
+
 			if (OnClientConnected != null)
 			{
 				OnClientConnected(this, e);

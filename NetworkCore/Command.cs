@@ -9,7 +9,9 @@ namespace NetworkCore
     internal enum CommandType : byte
     {
         Notification = 0,
-        Wallpaper
+        Wallpaper,
+		UserJoined,
+		UserLeft,
     }
 
     internal static class Command
@@ -43,5 +45,7 @@ namespace NetworkCore
 
             return new Tuple<CommandType, string>(commandType, parameters);
         }
+
+		//internal static byte[] CommandBuilder(CommandType type, Multiple params);
     }
 }
