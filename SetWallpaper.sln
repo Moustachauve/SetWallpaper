@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetWallpaper", "SetWallpaper\SetWallpaper.csproj", "{C951F883-3E5C-4824-91F5-EC7B77B60022}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkCore", "NetworkCore\NetworkCore.csproj", "{081064F4-6B49-4912-9503-246F10B2ED4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetWallpaperServer", "SetWallpaperServer\SetWallpaperServer.csproj", "{2D0C7AED-81AB-4ED2-BE49-FF2E6287C2E1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C951F883-3E5C-4824-91F5-EC7B77B60022}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C951F883-3E5C-4824-91F5-EC7B77B60022}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C951F883-3E5C-4824-91F5-EC7B77B60022}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C951F883-3E5C-4824-91F5-EC7B77B60022}.Release|Any CPU.Build.0 = Release|Any CPU
+		{081064F4-6B49-4912-9503-246F10B2ED4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{081064F4-6B49-4912-9503-246F10B2ED4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{081064F4-6B49-4912-9503-246F10B2ED4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{081064F4-6B49-4912-9503-246F10B2ED4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D0C7AED-81AB-4ED2-BE49-FF2E6287C2E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D0C7AED-81AB-4ED2-BE49-FF2E6287C2E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D0C7AED-81AB-4ED2-BE49-FF2E6287C2E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D0C7AED-81AB-4ED2-BE49-FF2E6287C2E1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

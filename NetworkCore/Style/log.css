@@ -1,0 +1,49 @@
+﻿/* ===== GENERAL SETTINGS ===== */
+
+* {
+	margin:0;
+	padding:0;
+}
+
+body {
+	background-color:#3b3a39/*#3b3a39*/;
+	padding:10px;
+	font-size:14px;
+}
+
+div
+{
+	color:#f7f7f7;
+	margin-bottom:2px;
+}
+
+/* ===== IMAGE FORMATING ===== */
+
+img {
+	display:block;
+	margin:auto;
+	/*max-height:70px; -- Does not work... */
+	border:2px solid #fff;
+}
+
+/* ===== PREFIX (EX: [ERROR], [NOTIF], ...) ===== */
+
+.prefix {
+	text-transform:uppercase;
+}
+
+/* ===== DATE ===== */
+.date {
+	color:#e2e2e2;
+}
+
+/* ===== NOTIFICATION ===== */
+.notif {
+	color:#b0e0ff;
+}
+
+/* ===== ERROR ===== */
+.error {
+	color:#ff0000;
+}
+
