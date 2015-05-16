@@ -10,6 +10,7 @@ using System.Net.Sockets;
 using System.Drawing;
 
 using System.IO;
+using NetworkCore.Command;
 
 namespace NetworkCore
 {
@@ -206,7 +207,7 @@ namespace NetworkCore
 				case CommandType.Notification:
 					NotificationReceived(e.Data);
 					break;
-				case CommandType.Wallpaper:
+				case CommandType.SetWallpaper:
 					WallpaperReceived(e.Data);
 					break;
 			}
@@ -260,7 +261,7 @@ namespace NetworkCore
 			data[0] = (byte)style;
 			Array.Copy(imageArr, 0, data, 1, imageArr.Length);
 
-			m_client.Send(Command.PrefixCommand(CommandType.Wallpaper, data));
+			m_client.Send(Command_old.PrefixCommand(CommandType.SetWallpaper, data));
 
 		}
 

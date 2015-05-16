@@ -7,6 +7,7 @@ using System.Linq;
 using AltarNet;
 using System.Drawing;
 using System.IO;
+using NetworkCore.Command;
 
 namespace NetworkCore
 {
@@ -194,7 +195,7 @@ namespace NetworkCore
 			var commandReceived = (CommandType)e.Data[0];
 			switch (commandReceived)
 			{
-				case CommandType.Wallpaper:
+				case CommandType.SetWallpaper:
                     byte[] imageArr = new byte[e.Data.Length - 1];
 
                     Array.Copy(e.Data, 2, imageArr, 0, e.Data.Length - 2);
@@ -230,7 +231,7 @@ namespace NetworkCore
 			if (!IsRunning)
 				throw new InvalidOperationException("Can't send a notification while server is not running");
 
-			byte[] data = Command.PrefixCommand(CommandType.Notification, pMessage);
+			byte[] data = Command_old.PrefixCommand(CommandType.Notification, pMessage);
 			m_server.SendAll(data);
 		}
 
@@ -244,7 +245,7 @@ namespace NetworkCore
 			if (!IsRunning)
 				throw new InvalidOperationException("Can't send a notification while server is not running");
 
-			byte[] data = Command.PrefixCommand(CommandType.Notification, pMessage);
+			byte[] data = Command_old.PrefixCommand(CommandType.Notification, pMessage);
 			m_server.Send(pClient, data);
 		}
 

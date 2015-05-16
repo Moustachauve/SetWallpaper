@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetworkCore.Command;
 
 namespace NetworkCore
 {
-    internal enum CommandType : byte
-    {
-        Notification = 0,
-        Wallpaper,
-		UserJoined,
-		UserLeft,
-    }
 
-    internal static class Command
+	[Obsolete]
+    internal static class Command_old
     {
 
         internal static byte[] PrefixCommand(CommandType pCommand, byte[] commandData)
