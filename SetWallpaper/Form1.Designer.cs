@@ -58,6 +58,7 @@
 			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuIcoExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuIcoDisconnect = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuIcoOpen = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			this.mnuNotifyIcon.SuspendLayout();
@@ -259,6 +260,7 @@
 			// mnuNotifyIcon
 			// 
 			this.mnuNotifyIcon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuIcoOpen,
             this.mnuIcoSetWallpaper,
             this.toolStripMenuItem3,
             this.mnuIcoConnect,
@@ -267,54 +269,61 @@
             this.toolStripMenuItem4,
             this.mnuIcoExit});
 			this.mnuNotifyIcon.Name = "mnuNotifyIcon";
-			this.mnuNotifyIcon.Size = new System.Drawing.Size(153, 148);
+			this.mnuNotifyIcon.Size = new System.Drawing.Size(176, 170);
 			// 
 			// mnuIcoSetWallpaper
 			// 
 			this.mnuIcoSetWallpaper.Enabled = false;
 			this.mnuIcoSetWallpaper.Name = "mnuIcoSetWallpaper";
-			this.mnuIcoSetWallpaper.Size = new System.Drawing.Size(152, 22);
+			this.mnuIcoSetWallpaper.Size = new System.Drawing.Size(175, 22);
 			this.mnuIcoSetWallpaper.Text = "Set &Wallpaper";
 			this.mnuIcoSetWallpaper.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(172, 6);
 			// 
 			// mnuIcoConnect
 			// 
 			this.mnuIcoConnect.Name = "mnuIcoConnect";
-			this.mnuIcoConnect.Size = new System.Drawing.Size(152, 22);
+			this.mnuIcoConnect.Size = new System.Drawing.Size(175, 22);
 			this.mnuIcoConnect.Text = "&Connect";
 			this.mnuIcoConnect.Click += new System.EventHandler(this.mnuConnect_Click);
 			// 
 			// mnuIcoFindServer
 			// 
 			this.mnuIcoFindServer.Name = "mnuIcoFindServer";
-			this.mnuIcoFindServer.Size = new System.Drawing.Size(152, 22);
+			this.mnuIcoFindServer.Size = new System.Drawing.Size(175, 22);
 			this.mnuIcoFindServer.Text = "&Find a server";
 			this.mnuIcoFindServer.Click += new System.EventHandler(this.mnuFindServer_Click);
 			// 
 			// toolStripMenuItem4
 			// 
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(172, 6);
 			// 
 			// mnuIcoExit
 			// 
 			this.mnuIcoExit.Name = "mnuIcoExit";
-			this.mnuIcoExit.Size = new System.Drawing.Size(152, 22);
-			this.mnuIcoExit.Text = "&Exit";
+			this.mnuIcoExit.Size = new System.Drawing.Size(175, 22);
+			this.mnuIcoExit.Text = "&Exit SetWallpaper";
 			this.mnuIcoExit.Click += new System.EventHandler(this.mnuExit_Click);
 			// 
 			// mnuIcoDisconnect
 			// 
 			this.mnuIcoDisconnect.Enabled = false;
 			this.mnuIcoDisconnect.Name = "mnuIcoDisconnect";
-			this.mnuIcoDisconnect.Size = new System.Drawing.Size(152, 22);
+			this.mnuIcoDisconnect.Size = new System.Drawing.Size(175, 22);
 			this.mnuIcoDisconnect.Text = "&Disconnect";
 			this.mnuIcoDisconnect.Click += new System.EventHandler(this.mnuConnect_Click);
+			// 
+			// mnuIcoOpen
+			// 
+			this.mnuIcoOpen.Name = "mnuIcoOpen";
+			this.mnuIcoOpen.Size = new System.Drawing.Size(175, 22);
+			this.mnuIcoOpen.Text = "&Open SetWallpaper";
+			this.mnuIcoOpen.Click += new System.EventHandler(this.mnuIcoOpen_Click);
 			// 
 			// Form1
 			// 
@@ -379,6 +388,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
 		private System.Windows.Forms.ToolStripMenuItem mnuIcoExit;
 		private System.Windows.Forms.ToolStripMenuItem mnuIcoDisconnect;
+		private System.Windows.Forms.ToolStripMenuItem mnuIcoOpen;
     }
 }
 

@@ -70,12 +70,15 @@ namespace SetWallpaper
             {
                 logViewer.WriteLine("Selected image is invalid:" + Environment.NewLine + ex.Message, MessageType.Error);
                 Statut = "Error with file: " + path;
+				if (!this.Visible)
+					notifyIcon.ShowBalloonTip(3000, "SetWallpaper", "Error with file \"" + path + "\". See log for more details", ToolTipIcon.Error);
+
             }
         }
 
         private void mnuExit_Click(object sender, EventArgs e)
         {
-            Close();
+			Application.Exit();
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
@@ -105,6 +108,9 @@ namespace SetWallpaper
             {
                 logViewer.WriteLine("No server found", MessageType.Error);
                 Statut = "No server found";
+				if (!this.Visible)
+					notifyIcon.ShowBalloonTip(2000, "SetWallpaper", "No server found", ToolTipIcon.Warning);
+
                 m_client.Disconnect();
                 m_client = null;
             }
@@ -112,6 +118,9 @@ namespace SetWallpaper
             {
                 logViewer.WriteLine("Connected to server " + m_client.Ip + ":" + m_client.Port);
                 Statut = "Connected to server " + m_client.Ip + ":" + m_client.Port;
+				if (!this.Visible)
+					notifyIcon.ShowBalloonTip(2000, "SetWallpaper", "Connected to server " + m_client.Ip + ":" + m_client.Port, ToolTipIcon.Info);
+
                 m_client.OnDisconnected += m_client_OnDisconnected;
                 m_client.OnNotificationReceived += m_client_OnNotificationReceived;
                 m_client.OnWallPaperReceived += m_client_OnWallPaperReceived;
@@ -193,6 +202,10 @@ namespace SetWallpaper
 
 			logViewer.WriteLine("Connection lost with " + m_client.Ip + ":" + m_client.Port, MessageType.Error);
 			Statut = "Connection lost with " + m_client.Ip + ":" + m_client.Port;
+
+			if (!this.Visible)
+				notifyIcon.ShowBalloonTip(3000, "SetWallpaper", "Connection lost with " + m_client.Ip + ":" + m_client.Port, ToolTipIcon.Warning);
+
 			m_client = null;
 			UpdateUIState();
 		}
@@ -202,11 +215,11 @@ namespace SetWallpaper
         {
             if (IsConnected)
             {
-                mnuConnect.Text = "Disconnect";
+                mnuConnect.Text = "&Disconnect";
             }
             else
             {
-                mnuConnect.Text = "Connect...";
+                mnuConnect.Text = "&Connect...";
             }
 
 			mnuIcoSetWallpaper.Enabled = IsConnected;
@@ -346,6 +359,9 @@ namespace SetWallpaper
 
             logViewer.WriteLine("Connecting to " + ip + ":" + port + "...");
             Statut = "Connecting to " + ip + ":" + port + "...";
+			if (!this.Visible)
+				notifyIcon.ShowBalloonTip(1000, "SetWallpaper", "Connecting to " + ip + ":" + port + "...", ToolTipIcon.None);
+
 
             m_client = new ClientManager(ip, port);
             pgbProgress.Visible = true;
@@ -359,16 +375,24 @@ namespace SetWallpaper
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			e.Cancel = true;
+			if (e.CloseReason == CloseReason.UserClosing)
+			{
+				e.Cancel = true;
 
-			this.Hide();
-			notifyIcon.ShowBalloonTip(2500, "SetWallpaper", "SetWallpaper is still running in the background...", ToolTipIcon.Info);
+				this.Hide();
+				notifyIcon.ShowBalloonTip(2500, "SetWallpaper", "SetWallpaper is still running in the background...", ToolTipIcon.Info);
+			}
 		}
 
 		private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
 			if(e.Button == System.Windows.Forms.MouseButtons.Left)
 				this.Show();
+		}
+
+		private void mnuIcoOpen_Click(object sender, EventArgs e)
+		{
+			this.Show();
 		}
 
     }
