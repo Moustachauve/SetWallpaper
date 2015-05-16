@@ -184,37 +184,44 @@ namespace SetWallpaper
             {
                 OnDisconnected();
             }
-
         }
+
+		private void OnDisconnected()
+		{
+			if (m_client == null)
+				return;
+
+			logViewer.WriteLine("Connection lost with " + m_client.Ip + ":" + m_client.Port, MessageType.Error);
+			Statut = "Connection lost with " + m_client.Ip + ":" + m_client.Port;
+			m_client = null;
+			UpdateUIState();
+		}
+
 
         private void UpdateUIState()
         {
             if (IsConnected)
             {
-                mnuFindServer.Enabled = false;
                 mnuConnect.Text = "Disconnect";
             }
             else
             {
-                mnuFindServer.Enabled = true;
                 mnuConnect.Text = "Connect...";
             }
+
+			mnuIcoSetWallpaper.Enabled = IsConnected;
+			mnuIcoConnect.Enabled = !IsConnected;
+			mnuIcoFindServer.Enabled = !IsConnected;
+			mnuIcoDisconnect.Enabled = IsConnected;
+
+			mnuFindServer.Enabled = !IsConnected;
             mnuSetWallpaper.Enabled = IsConnected;
-        }
-
-        private void OnDisconnected()
-        {
-            if (m_client == null)
-                return;
-
-            logViewer.WriteLine("Connection lost with " + m_client.Ip + ":" + m_client.Port, MessageType.Error);
-            Statut = "Connection lost with " + m_client.Ip + ":" + m_client.Port;
-            m_client = null;
-            UpdateUIState();
         }
 
         private void rad_CheckedChanged(object sender, EventArgs e)
         {
+			//TODO: Replace checkboxes with combo box
+
             RadioButton rad = (RadioButton)sender;
 
             if (rad.Checked)
@@ -349,6 +356,20 @@ namespace SetWallpaper
 
             ConnectionFound(isConnected);
         }
+
+		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			e.Cancel = true;
+
+			this.Hide();
+			notifyIcon.ShowBalloonTip(2500, "SetWallpaper", "SetWallpaper is still running in the background...", ToolTipIcon.Info);
+		}
+
+		private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+		{
+			if(e.Button == System.Windows.Forms.MouseButtons.Left)
+				this.Show();
+		}
 
     }
 }
