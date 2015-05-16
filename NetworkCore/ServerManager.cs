@@ -209,12 +209,16 @@ namespace NetworkCore
 			{
 				if (OnCommandError != null)
 					OnCommandError(this, new TcpErrorEventArgs(e.Client, ex));
+
+				return;
 			}
 
 			if (OnCommandReceived != null)
 			{
 				OnCommandReceived(this, new CommandReceivedArgs(command, (User)e.Client.Tag));
 			}
+
+			SendCommand(command);
 		}
 
 		#endregion
