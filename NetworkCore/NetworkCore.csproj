@@ -52,13 +52,13 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command\SetWallpaperCommand.cs" />
+    <Compile Include="Commands\SetWallpaperCommand.cs" />
     <Compile Include="Command_old.cs" />
     <Compile Include="ClientManager.cs" />
-    <Compile Include="Command\Command.cs" />
-    <Compile Include="Command\CommandSerializer.cs" />
-    <Compile Include="Command\Exceptions\InvalidCommandException.cs" />
-    <Compile Include="Command\NotificationCommand.cs" />
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\CommandSerializer.cs" />
+    <Compile Include="Commands\Exceptions\InvalidCommandException.cs" />
+    <Compile Include="Commands\NotificationCommand.cs" />
     <Compile Include="Control\LogViewer.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -78,9 +78,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Game\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

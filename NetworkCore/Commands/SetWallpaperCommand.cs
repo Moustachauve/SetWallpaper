@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetworkCore.Command
+namespace NetworkCore.Commands
 {
 	public class SetWallpaperCommand : Command
 	{

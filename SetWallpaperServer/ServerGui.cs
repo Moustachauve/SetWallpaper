@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Net;
@@ -10,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AltarNet;
 using NetworkCore;
+using NetworkCore.Commands;
 using NetworkCore.Control;
 
 namespace SetWallpaperServer
@@ -25,9 +25,34 @@ namespace SetWallpaperServer
 			m_serverHandler = new ServerManager();
 			m_serverHandler.OnClientConnected += m_serverHandler_OnClientConnected;
 			m_serverHandler.OnClientDisonnected += m_serverHandler_OnClientDisonnected;
-            m_serverHandler.OnWallPaperReceived += m_serverHandler_OnWallPaperReceived;
+			m_serverHandler.OnCommandReceived += m_serverHandler_OnCommandReceived;
+			m_serverHandler.OnCommandError += m_serverHandler_OnCommandError;
+
 
 			Start();
+		}
+
+		void m_serverHandler_OnCommandError(object sender, TcpErrorEventArgs e)
+		{
+			logViewer.WriteLine("An error occured while trying to read a command: " + e.Error.Message, MessageType.Error);
+		}
+
+		void m_serverHandler_OnCommandReceived(object sender, CommandReceivedArgs e)
+		{
+			switch (e.Command.Type)
+			{
+				case CommandType.Notification:
+					NotificationCommand notifCommand = (NotificationCommand)e.Command;
+					logViewer.WriteLine(notifCommand.Text, MessageType.Notification);
+					break;
+				case CommandType.SetWallpaper:
+					SetWallpaperCommand setWallCommand = (SetWallpaperCommand)e.Command;
+					logViewer.WriteLine("New wallpaper received from " + e.Sender.Ip);
+					break;
+				default:
+					logViewer.WriteLine("Command received from " + e.Sender.Ip);
+					break;
+			}
 		}
 
 		public void Start()
@@ -64,7 +89,7 @@ namespace SetWallpaperServer
 			var userInfo = (User)e.Client.Tag;
 
 			logViewer.WriteLine(userInfo.Ip + " connected");
-			m_serverHandler.Notify("Welcome to this server.", e.Client);
+			m_serverHandler.SendCommand(new NotificationCommand("Welcome to this server!"), e.Client);
 		}
 
 		#endregion

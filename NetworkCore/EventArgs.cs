@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AltarNet;
 using System.Drawing;
 using System.IO;
+using NetworkCore.Commands;
 
 namespace NetworkCore
 {
@@ -76,4 +77,23 @@ namespace NetworkCore
 
 
     #endregion
+
+	#region CommandReceived
+
+	public class CommandReceivedArgs : EventArgs
+	{
+		private Command m_command;
+		public Command Command { get { return m_command; } }
+
+		private User m_sender;
+		public User Sender { get { return m_sender; } }
+
+		public CommandReceivedArgs(Command pCommand, User pSender)
+		{
+			m_command = pCommand;
+			m_sender = pSender;
+		}
+	}
+
+	#endregion
 }

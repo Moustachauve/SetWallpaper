@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetworkCore.Command
+namespace NetworkCore.Commands
 {
 	internal static class CommandSerializer
 	{
@@ -23,7 +23,7 @@ namespace NetworkCore.Command
 		/// </summary>
 		/// <param name="pData">Byte array representing the command</param>
 		/// <returns>Deserialized command</returns>
-		/// <exception cref="NetworkCore.Command.InvalidCommandException"></exception>
+		/// <exception cref="NetworkCore.Commands.InvalidCommandException"></exception>
 		internal static Command DeserializeCommand(byte[] pData)
 		{
 			CommandType type = (CommandType)pData[0];

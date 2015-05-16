@@ -10,7 +10,7 @@ using System.Net.Sockets;
 using System.Drawing;
 
 using System.IO;
-using NetworkCore.Command;
+using NetworkCore.Commands;
 
 namespace NetworkCore
 {

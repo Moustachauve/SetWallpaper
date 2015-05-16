@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NetworkCore.Command;
+using NetworkCore.Commands;
 
 namespace NetworkCore
 {

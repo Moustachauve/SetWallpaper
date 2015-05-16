@@ -7,7 +7,7 @@ using System.Linq;
 using AltarNet;
 using System.Drawing;
 using System.IO;
-using NetworkCore.Command;
+using NetworkCore.Commands;
 
 namespace NetworkCore
 {
@@ -26,7 +26,15 @@ namespace NetworkCore
 		/// </summary>
 		public event EventHandler<TcpEventArgs> OnClientDisonnected;
 
-        public event EventHandler<WallpaperReceivedArgs> OnWallPaperReceived;
+		/// <summary>
+		/// Occurs when a client send a command to the server
+		/// </summary>
+        public event EventHandler<CommandReceivedArgs> OnCommandReceived;
+
+		/// <summary>
+		/// Occurs when a client send a wrong command data to the server
+		/// </summary>
+		public event EventHandler<TcpErrorEventArgs> OnCommandError;
 
 		#endregion
 
@@ -141,7 +149,7 @@ namespace NetworkCore
 		{
 			if (!IsRunning)
 				return;
-			this.NotifyAll("Server is shutting down...");
+			SendCommand(new NotificationCommand("Server is shutting down..."));
 
 			m_server.Connected -= m_server_Connected;
 			m_server.Disconnected -= m_server_Disconnected;
@@ -192,29 +200,22 @@ namespace NetworkCore
 
 		private void m_server_ReceivedFull(object sender, TcpReceivedEventArgs e)
 		{
-			var commandReceived = (CommandType)e.Data[0];
-			switch (commandReceived)
+			Command command = null;
+			try
 			{
-				case CommandType.SetWallpaper:
-                    byte[] imageArr = new byte[e.Data.Length - 1];
+				command = CommandSerializer.DeserializeCommand(e.Data);
+			}
+			catch (InvalidCommandException ex)
+			{
+				if (OnCommandError != null)
+					OnCommandError(this, new TcpErrorEventArgs(e.Client, ex));
+			}
 
-                    Array.Copy(e.Data, 2, imageArr, 0, e.Data.Length - 2);
-
-					Image image = (Bitmap)((new ImageConverter()).ConvertFrom(imageArr));
-
-                    if (OnWallPaperReceived != null)
-						OnWallPaperReceived(this, new WallpaperReceivedArgs(image, (Wallpaper.Style)e.Data[1]));
-
-					m_server.SendAllAsync(e.Data);
-
-                    break;
+			if (OnCommandReceived != null)
+			{
+				OnCommandReceived(this, new CommandReceivedArgs(command, (User)e.Client.Tag));
 			}
 		}
-
-		#endregion
-
-		#region Command Handler
-
 
 		#endregion
 
@@ -223,30 +224,23 @@ namespace NetworkCore
 		#region Server commands
 
 		/// <summary>
-		/// Send a notification to all connected clients
+		/// Send a command to all connected client
 		/// </summary>
-		/// <param name="pMessage">Message to be sent</param>
-		public void NotifyAll(string pMessage)
+		/// <param name="pCommand">Command to send</param>
+		public void SendCommand(Command pCommand)
 		{
 			if (!IsRunning)
-				throw new InvalidOperationException("Can't send a notification while server is not running");
+				throw new InvalidOperationException("Cannot send commands while server is not running");
 
-			byte[] data = Command_old.PrefixCommand(CommandType.Notification, pMessage);
-			m_server.SendAll(data);
+			m_server.SendAll(pCommand.ToByteArray());
 		}
 
-		/// <summary>
-		/// Send a notification to a client
-		/// </summary>
-		/// <param name="pMessage">Message to be sent</param>
-		/// <param name="pClient">Client to be notified</param>
-		public void Notify(string pMessage, TcpClientInfo pClient)
+		public void SendCommand(Command pCommand, TcpClientInfo pClient)
 		{
 			if (!IsRunning)
-				throw new InvalidOperationException("Can't send a notification while server is not running");
+				throw new InvalidOperationException("Cannot send commands while server is not running");
 
-			byte[] data = Command_old.PrefixCommand(CommandType.Notification, pMessage);
-			m_server.Send(pClient, data);
+			m_server.Send(pClient, pCommand.ToByteArray());
 		}
 
 		#endregion
