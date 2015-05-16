@@ -35,6 +35,7 @@ namespace NetworkCore.Commands
 					command = new NotificationCommand(pData);
 					break;
 				case CommandType.SetWallpaper:
+					command = new SetWallpaperCommand(pData);
 					break;
 				case CommandType.UserJoined:
 					break;
