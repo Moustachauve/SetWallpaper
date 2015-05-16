@@ -42,11 +42,6 @@
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.lblStatut = new System.Windows.Forms.ToolStripStatusLabel();
 			this.pgbProgress = new System.Windows.Forms.ToolStripProgressBar();
-			this.radTile = new System.Windows.Forms.RadioButton();
-			this.radStretch = new System.Windows.Forms.RadioButton();
-			this.radCenter = new System.Windows.Forms.RadioButton();
-			this.radFill = new System.Windows.Forms.RadioButton();
-			this.radFit = new System.Windows.Forms.RadioButton();
 			this.logViewer = new NetworkCore.Control.LogViewer();
 			this.btnSendWallpaper = new System.Windows.Forms.Button();
 			this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
@@ -59,6 +54,7 @@
 			this.mnuIcoExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuIcoDisconnect = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuIcoOpen = new System.Windows.Forms.ToolStripMenuItem();
+			this.cboStyle = new System.Windows.Forms.ComboBox();
 			this.menuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			this.mnuNotifyIcon.SuspendLayout();
@@ -157,69 +153,6 @@
 			this.pgbProgress.Size = new System.Drawing.Size(50, 16);
 			this.pgbProgress.Visible = false;
 			// 
-			// radTile
-			// 
-			this.radTile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.radTile.AutoSize = true;
-			this.radTile.Location = new System.Drawing.Point(425, 326);
-			this.radTile.Name = "radTile";
-			this.radTile.Size = new System.Drawing.Size(42, 17);
-			this.radTile.TabIndex = 3;
-			this.radTile.Text = "Tile";
-			this.radTile.UseVisualStyleBackColor = true;
-			this.radTile.CheckedChanged += new System.EventHandler(this.rad_CheckedChanged);
-			// 
-			// radStretch
-			// 
-			this.radStretch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.radStretch.AutoSize = true;
-			this.radStretch.Location = new System.Drawing.Point(535, 326);
-			this.radStretch.Name = "radStretch";
-			this.radStretch.Size = new System.Drawing.Size(59, 17);
-			this.radStretch.TabIndex = 4;
-			this.radStretch.TabStop = true;
-			this.radStretch.Text = "Stretch";
-			this.radStretch.UseVisualStyleBackColor = true;
-			this.radStretch.CheckedChanged += new System.EventHandler(this.rad_CheckedChanged);
-			// 
-			// radCenter
-			// 
-			this.radCenter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.radCenter.AutoSize = true;
-			this.radCenter.Checked = true;
-			this.radCenter.Location = new System.Drawing.Point(473, 326);
-			this.radCenter.Name = "radCenter";
-			this.radCenter.Size = new System.Drawing.Size(56, 17);
-			this.radCenter.TabIndex = 5;
-			this.radCenter.TabStop = true;
-			this.radCenter.Text = "Center";
-			this.radCenter.UseVisualStyleBackColor = true;
-			this.radCenter.CheckedChanged += new System.EventHandler(this.rad_CheckedChanged);
-			// 
-			// radFill
-			// 
-			this.radFill.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.radFill.AutoSize = true;
-			this.radFill.Location = new System.Drawing.Point(382, 326);
-			this.radFill.Name = "radFill";
-			this.radFill.Size = new System.Drawing.Size(37, 17);
-			this.radFill.TabIndex = 6;
-			this.radFill.Text = "Fill";
-			this.radFill.UseVisualStyleBackColor = true;
-			this.radFill.CheckedChanged += new System.EventHandler(this.rad_CheckedChanged);
-			// 
-			// radFit
-			// 
-			this.radFit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.radFit.AutoSize = true;
-			this.radFit.Location = new System.Drawing.Point(340, 326);
-			this.radFit.Name = "radFit";
-			this.radFit.Size = new System.Drawing.Size(36, 17);
-			this.radFit.TabIndex = 7;
-			this.radFit.Text = "Fit";
-			this.radFit.UseVisualStyleBackColor = true;
-			this.radFit.CheckedChanged += new System.EventHandler(this.rad_CheckedChanged);
-			// 
 			// logViewer
 			// 
 			this.logViewer.AllowNavigation = false;
@@ -241,9 +174,9 @@
 			// btnSendWallpaper
 			// 
 			this.btnSendWallpaper.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnSendWallpaper.Location = new System.Drawing.Point(600, 324);
+			this.btnSendWallpaper.Location = new System.Drawing.Point(600, 322);
 			this.btnSendWallpaper.Name = "btnSendWallpaper";
-			this.btnSendWallpaper.Size = new System.Drawing.Size(57, 20);
+			this.btnSendWallpaper.Size = new System.Drawing.Size(57, 23);
 			this.btnSendWallpaper.TabIndex = 8;
 			this.btnSendWallpaper.Text = "Send...";
 			this.btnSendWallpaper.UseVisualStyleBackColor = true;
@@ -269,7 +202,7 @@
             this.toolStripMenuItem4,
             this.mnuIcoExit});
 			this.mnuNotifyIcon.Name = "mnuNotifyIcon";
-			this.mnuNotifyIcon.Size = new System.Drawing.Size(176, 170);
+			this.mnuNotifyIcon.Size = new System.Drawing.Size(176, 148);
 			// 
 			// mnuIcoSetWallpaper
 			// 
@@ -325,18 +258,25 @@
 			this.mnuIcoOpen.Text = "&Open SetWallpaper";
 			this.mnuIcoOpen.Click += new System.EventHandler(this.mnuIcoOpen_Click);
 			// 
+			// cboStyle
+			// 
+			this.cboStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboStyle.FormattingEnabled = true;
+			this.cboStyle.ItemHeight = 13;
+			this.cboStyle.Location = new System.Drawing.Point(511, 323);
+			this.cboStyle.Name = "cboStyle";
+			this.cboStyle.Size = new System.Drawing.Size(89, 21);
+			this.cboStyle.TabIndex = 10;
+			this.cboStyle.SelectedIndexChanged += new System.EventHandler(this.cboStyle_SelectedIndexChanged);
+			// 
 			// Form1
 			// 
 			this.AllowDrop = true;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(679, 345);
+			this.Controls.Add(this.cboStyle);
 			this.Controls.Add(this.btnSendWallpaper);
-			this.Controls.Add(this.radFit);
-			this.Controls.Add(this.radFill);
-			this.Controls.Add(this.radCenter);
-			this.Controls.Add(this.radStretch);
-			this.Controls.Add(this.radTile);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.logViewer);
 			this.Controls.Add(this.menuStrip1);
@@ -371,11 +311,6 @@
 		private System.Windows.Forms.ToolStripStatusLabel lblStatut;
 		private System.Windows.Forms.ToolStripProgressBar pgbProgress;
 		private System.Windows.Forms.ToolStripMenuItem mnuSetWallpaper;
-		private System.Windows.Forms.RadioButton radTile;
-		private System.Windows.Forms.RadioButton radStretch;
-		private System.Windows.Forms.RadioButton radCenter;
-        private System.Windows.Forms.RadioButton radFill;
-        private System.Windows.Forms.RadioButton radFit;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem mnuConnect;
         private System.Windows.Forms.Button btnSendWallpaper;
@@ -389,6 +324,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuIcoExit;
 		private System.Windows.Forms.ToolStripMenuItem mnuIcoDisconnect;
 		private System.Windows.Forms.ToolStripMenuItem mnuIcoOpen;
+		private System.Windows.Forms.ComboBox cboStyle;
     }
 }
 

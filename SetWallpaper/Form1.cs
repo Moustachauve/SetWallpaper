@@ -34,8 +34,14 @@ namespace SetWallpaper
             UpdateUIState();
             Statut = "Not connected";
             m_wallpaperStyle = Wallpaper.Style.Center;
-            radCenter.Checked = true;
             logViewer.Document.Body.DragOver += Body_DragOver;
+
+			foreach(Wallpaper.Style style in Enum.GetValues(typeof(Wallpaper.Style)))
+			{
+				cboStyle.Items.Add(style);
+			}
+
+			cboStyle.SelectedItem = Wallpaper.Style.Center;
         }
 
         void Body_DragOver(object sender, HtmlElementEventArgs e)
@@ -229,36 +235,8 @@ namespace SetWallpaper
 
 			mnuFindServer.Enabled = !IsConnected;
             mnuSetWallpaper.Enabled = IsConnected;
-        }
 
-        private void rad_CheckedChanged(object sender, EventArgs e)
-        {
-			//TODO: Replace checkboxes with combo box
-
-            RadioButton rad = (RadioButton)sender;
-
-            if (rad.Checked)
-            {
-                switch (rad.Name)
-                {
-                    case "radTile":
-                        m_wallpaperStyle = Wallpaper.Style.Tile;
-                        break;
-                    case "radCenter":
-                        m_wallpaperStyle = Wallpaper.Style.Center;
-                        break;
-                    case "radStretch":
-                        m_wallpaperStyle = Wallpaper.Style.Stretch;
-                        break;
-                    case "radFit":
-                        m_wallpaperStyle = Wallpaper.Style.Fit;
-                        break;
-                    case "radFill":
-                        m_wallpaperStyle = Wallpaper.Style.Fill;
-                        break;
-                }
-            }
-
+			btnSendWallpaper.Enabled = IsConnected;
         }
 
         private void Form1_DragDrop(object sender, DragEventArgs e)
@@ -393,6 +371,11 @@ namespace SetWallpaper
 		private void mnuIcoOpen_Click(object sender, EventArgs e)
 		{
 			this.Show();
+		}
+
+		private void cboStyle_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			m_wallpaperStyle = (Wallpaper.Style)cboStyle.SelectedItem;
 		}
 
     }
