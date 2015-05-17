@@ -41,6 +41,8 @@ namespace NetworkCore
 		private IPAddress m_ip;
 		private int m_port;
 
+		private bool m_isConnected;
+
 		#endregion
 
 		#region Properties
@@ -78,8 +80,7 @@ namespace NetworkCore
 		/// </summary>
 		public bool IsConnected
 		{
-			get;
-			private set;
+			get { return m_isConnected; }
 		}
 
 		/// <summary>
@@ -132,13 +133,13 @@ namespace NetworkCore
 			m_client = new TcpClientHandler(m_ip, m_port);
 			if (m_client.Connect())
 			{
-				IsConnected = true;
+				m_isConnected = true;
 				m_client.Disconnected += m_client_Disconnected;
 				m_client.ReceivedFull += m_client_ReceivedFull;
 				return true;
 			}
 
-			IsConnected = false;
+			m_isConnected = false;
 			m_client = null;
 			return false;
 		}
@@ -157,13 +158,13 @@ namespace NetworkCore
 
 			if (isSuccessful)
 			{
-				IsConnected = true;
+				m_isConnected = true;
 				m_client.Disconnected += m_client_Disconnected;
 				m_client.ReceivedFull += m_client_ReceivedFull;
 				return true;
 			}
 
-			IsConnected = false;
+			m_isConnected = false;
 			m_client = null;
 			return false;
 		}
@@ -176,7 +177,7 @@ namespace NetworkCore
 			if (!IsConnected)
 				return;
 
-			IsConnected = false;
+			m_isConnected = false;
 			m_client.Disconnect();
 			m_client = null;
 		}
@@ -189,7 +190,7 @@ namespace NetworkCore
 
 		private void m_client_Disconnected(object sender, TcpEventArgs e)
 		{
-			IsConnected = false;
+			m_isConnected = false;
 			if (OnDisconnected != null)
 			{
 				OnDisconnected(this, e);
@@ -306,13 +307,14 @@ namespace NetworkCore
 						{
 							m_client.Disconnected += m_client_Disconnected;
 							m_client.ReceivedFull += m_client_ReceivedFull;
-							IsConnected = true;
+							m_isConnected = true;
 							return true;
 						}
 						else
 						{
 							m_client.Disconnect();
 							m_client = null;
+							m_isConnected = false;
 						}
 					}
 				}
