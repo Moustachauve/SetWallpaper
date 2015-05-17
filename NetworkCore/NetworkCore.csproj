@@ -53,7 +53,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\SetWallpaperCommand.cs" />
-    <Compile Include="Command_old.cs" />
     <Compile Include="ClientManager.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandSerializer.cs" />
