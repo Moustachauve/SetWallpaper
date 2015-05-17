@@ -24,11 +24,14 @@ namespace NetworkCore
 		public event EventHandler<TcpEventArgs> OnDisconnected;
 
 		/// <summary>
-		/// Occurs when a notification is received from the server
+		/// Occurs when the client receive a command from the server
 		/// </summary>
-		public event EventHandler<NotificationReceivedArgs> OnNotificationReceived;
+		public event EventHandler<CommandReceivedArgs> OnCommandReceived;
 
-		public event EventHandler<WallpaperReceivedArgs> OnWallPaperReceived;
+		/// <summary>
+		/// Occurs when the server send a wrong command data to the client
+		/// </summary>
+		public event EventHandler<TcpErrorEventArgs> OnCommandError;
 
 		#endregion
 
@@ -196,80 +199,56 @@ namespace NetworkCore
 
 		#endregion
 
-		#region Received handler
+		#region CommandReceived handler
 
 		private void m_client_ReceivedFull(object sender, TcpReceivedEventArgs e)
 		{
-			var commandReceived = (CommandType)e.Data[0];
-
-			switch (commandReceived)
+			Command command = null;
+			try
 			{
-				case CommandType.Notification:
-					NotificationReceived(e.Data);
-					break;
-				case CommandType.SetWallpaper:
-					WallpaperReceived(e.Data);
-					break;
+				command = CommandSerializer.DeserializeCommand(e.Data);
 			}
+			catch (InvalidCommandException ex)
+			{
+				if (OnCommandError != null)
+					OnCommandError(this, new TcpErrorEventArgs(e.Client, ex));
+
+				return;
+			}
+
+			if (OnCommandReceived != null)
+			{
+				OnCommandReceived(this, new CommandReceivedArgs(command, (User)e.Client.Tag));
+			}
+
+			SendCommand(command);
 
 		}
 
 		#endregion
 
-		#region Commands Handler
+		#endregion
 
-		#region Notification
+		#region Commands
 
-		private void NotificationReceived(byte[] data)
+		/// <summary>
+		/// Send a command to the server
+		/// </summary>
+		/// <param name="pCommand">Command to send</param>
+		public void SendCommand(Command pCommand)
 		{
-			if (OnNotificationReceived != null)
-			{
-				string message = Encoding.UTF8.GetString(data, 1, data.Length - 1);
-				OnNotificationReceived(this, new NotificationReceivedArgs(message, "[SERVER] "));
-			}
+			if (!IsConnected)
+				throw new InvalidOperationException("Cannot send commands while not connected to a server");
+
+			m_client.Send(pCommand.ToByteArray());
 		}
-
-		#endregion
-
-		#region Wallpaper received
-
-		private void WallpaperReceived(byte[] data) {
-			if (OnWallPaperReceived != null)
-			{
-				byte[] imageArr = new byte[data.Length - 1];
-				Array.Copy(data, 2, imageArr, 0, data.Length - 2);
-				Image image = (Bitmap)((new ImageConverter()).ConvertFrom(imageArr));
-
-				OnWallPaperReceived(this, new WallpaperReceivedArgs(image, (Wallpaper.Style)data[1]));
-			}
-
-		}
-
-		#endregion
-
-		#endregion
 
 		#endregion
 
 		#region Utility
 
-		public void SendImage(Image image, Wallpaper.Style style)
-		{
-			ImageConverter imgCon = new ImageConverter();
-			byte[] imageArr = (byte[])imgCon.ConvertTo(image, typeof(byte[]));
-			byte[] data = new byte[imageArr.Length + 1];
-			data[0] = (byte)style;
-			Array.Copy(imageArr, 0, data, 1, imageArr.Length);
-
-			m_client.Send(Command_old.PrefixCommand(CommandType.SetWallpaper, data));
-
-		}
-
 		public bool FindServer(int port)
 		{
-			//m_client = new TcpClientHandler(m_ip, m_port);
-			//m_client.InfoHandler.Timeout = 100;
-
 			foreach (NetworkInterface netwIntrf in NetworkInterface.GetAllNetworkInterfaces())
 			{
 				//if the current interface doesn't have an IP, skip it
@@ -315,7 +294,6 @@ namespace NetworkCore
 
 						//this is the candidate IP address in "readable format" 
 						String ipCandidate = Convert.ToString(hostBytes[0]) + "." + Convert.ToString(hostBytes[1]) + "." + Convert.ToString(hostBytes[2]) + "." + Convert.ToString(hostBytes[3]);
-						Console.WriteLine("Trying: " + ipCandidate);
 
 						this.Ip = new IPAddress(hostBytes);
 
@@ -336,25 +314,6 @@ namespace NetworkCore
 							m_client.Disconnect();
 							m_client = null;
 						}
-
-						/*Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-						IAsyncResult result = socket.BeginConnect(ipCandidate, port, null, null);
-
-						bool success = result.AsyncWaitHandle.WaitOne(40, true);
-
-						if (!success)
-						{
-							socket.Close();
-							Console.WriteLine("No server on " + ipCandidate + ":" + port);
-						}
-						else
-						{
-							socket.Close();
-							Console.WriteLine("Found server on " + ipCandidate + ":" + port);
-
-							return new IPAddress(hostBytes);
-						}*/
-
 					}
 				}
 			}

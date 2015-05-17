@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using NetworkCore.Control;
+using NetworkCore.Commands;
 
 namespace SetWallpaper
 {
@@ -44,13 +45,8 @@ namespace SetWallpaper
 			cboStyle.SelectedItem = Wallpaper.Style.Center;
         }
 
-        void Body_DragOver(object sender, HtmlElementEventArgs e)
-        {
-            if(IsConnected)
-                ShowOverlay();
-        }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void selectImage_Click(object sender, EventArgs e)
         {
             OpenFileDialog opfDiag = new OpenFileDialog();
             opfDiag.Filter = "Image Files (*.bmp, *.jpg, *.png)|*.bmp;*.jpg;*.png";
@@ -69,7 +65,9 @@ namespace SetWallpaper
                 Image image = Image.FromFile(path);
                 logViewer.WriteLine("Sending " + Path.GetFileName(path) + " to server...");
                 Statut = "Sending " + Path.GetFileName(path) + " to server...";
-                m_client.SendImage(image, m_wallpaperStyle);
+
+				m_client.SendCommand(new SetWallpaperCommand(image, m_wallpaperStyle));
+
                 Statut = "Image " + Path.GetFileName(path) + " successfully sent";
             }
             catch (ArgumentException ex)
@@ -128,65 +126,105 @@ namespace SetWallpaper
 					notifyIcon.ShowBalloonTip(2000, "SetWallpaper", "Connected to server " + m_client.Ip + ":" + m_client.Port, ToolTipIcon.Info);
 
                 m_client.OnDisconnected += m_client_OnDisconnected;
-                m_client.OnNotificationReceived += m_client_OnNotificationReceived;
-                m_client.OnWallPaperReceived += m_client_OnWallPaperReceived;
+				m_client.OnCommandError += m_client_OnCommandError;
+				m_client.OnCommandReceived += m_client_OnCommandReceived;
+
                 logViewer.WriteLine("Ready to receive a wallpaper");
             }
 
             UpdateUIState();
         }
 
-        void m_client_OnWallPaperReceived(object sender, WallpaperReceivedArgs e)
-        {
-            if (InvokeRequired)
-            {
-                this.BeginInvoke((MethodInvoker)delegate
-                {
-                    OnWallPaperReceived(e);
-                });
-            }
-            else
-            {
-                OnWallPaperReceived(e);
-            }
-        }
+		#region Client events
 
-        private void OnWallPaperReceived(WallpaperReceivedArgs e)
+		#region Command handler
+
+		#region Command error
+
+		void m_client_OnCommandError(object sender, AltarNet.TcpErrorEventArgs e)
+		{
+			if (InvokeRequired)
+			{
+				this.BeginInvoke((MethodInvoker)delegate
+				{
+					OnCommandError(e);
+				});
+			}
+			else
+			{
+				OnCommandError(e);
+			}
+		}
+
+		private void OnCommandError(AltarNet.TcpErrorEventArgs e)
+		{
+			logViewer.WriteLine("A command from the server could not be read!", MessageType.Error);
+		}
+
+		#endregion
+
+		#region Command received
+		
+		void m_client_OnCommandReceived(object sender, CommandReceivedArgs e)
+		{
+			if (InvokeRequired)
+			{
+				this.BeginInvoke((MethodInvoker)delegate
+				{
+					OnCommandReceived(e);
+				});
+			}
+			else
+			{
+				OnCommandReceived(e);
+			}
+		}
+
+		private void OnCommandReceived(CommandReceivedArgs e)
+		{
+			switch (e.Command.Type)
+			{
+				case NetworkCore.Commands.CommandType.Notification:
+					break;
+				case NetworkCore.Commands.CommandType.SetWallpaper:
+					OnWallpaperReceived((SetWallpaperCommand)e.Command);
+					break;
+			}
+		}
+
+		#endregion
+
+		#region OnWallpaperReceived
+
+		private void OnWallpaperReceived(SetWallpaperCommand command)
         {
             string path = Path.Combine(Environment.CurrentDirectory, "temp_wallpaper.wllpr");
 
             if (File.Exists(path))
                 File.Delete(path);
 
-            logViewer.WriteLine("New wallpaper received (" + e.Style + ")");
+			logViewer.WriteLine("New wallpaper received (" + command.Style + ")");
 
-            e.Image.Save(path);
-            e.Image.Dispose();
-            Wallpaper.Set(new Uri(path), e.Style);
+			command.Image.Save(path);
+			command.Image.Dispose();
+			Wallpaper.Set(new Uri(path), command.Style);
             File.Delete(path);
         }
 
-        void m_client_OnNotificationReceived(object sender, NotificationReceivedArgs e)
+		#endregion
+
+		#region OnNotificationReceived
+
+		private void OnNotificationReceived(NotificationCommand e)
         {
-            if (InvokeRequired)
-            {
-                this.BeginInvoke((MethodInvoker)delegate
-                {
-                    OnNotificationReceived(e);
-                });
-            }
-            else
-            {
-                OnNotificationReceived(e);
-            }
+            logViewer.WriteLine(e.Text, MessageType.Notification);
         }
 
-        private void OnNotificationReceived(NotificationReceivedArgs e)
-        {
-            logViewer.WriteLine(e.Message, MessageType.Notification);
-        }
+		#endregion
 
-        void m_client_OnDisconnected(object sender, AltarNet.TcpEventArgs e)
+		#endregion
+
+		void m_client_OnDisconnected(object sender, AltarNet.TcpEventArgs e)
         {
             if (InvokeRequired)
             {
@@ -216,8 +254,9 @@ namespace SetWallpaper
 			UpdateUIState();
 		}
 
+		#endregion
 
-        private void UpdateUIState()
+		private void UpdateUIState()
         {
             if (IsConnected)
             {
@@ -239,7 +278,9 @@ namespace SetWallpaper
 			btnSendWallpaper.Enabled = IsConnected;
         }
 
-        private void Form1_DragDrop(object sender, DragEventArgs e)
+		#region Drag&drop events
+
+		private void Form1_DragDrop(object sender, DragEventArgs e)
         {
             //e.Effect = DragDropEffects.Copy;
             string[] FileList = (string[])e.Data.GetData(DataFormats.FileDrop, false);
@@ -268,12 +309,20 @@ namespace SetWallpaper
             }
         }
 
+		void Body_DragOver(object sender, HtmlElementEventArgs e)
+		{
+			if (IsConnected)
+				ShowOverlay();
+		}
+
         private void Form1_DragLeave(object sender, EventArgs e)
         {
             HideOverlay();
         }
 
-        private void ShowOverlay()
+		#endregion
+
+		private void ShowOverlay()
         {
             if (m_overlay != null)
                 return;

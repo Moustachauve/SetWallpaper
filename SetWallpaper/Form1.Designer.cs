@@ -89,7 +89,7 @@
 			this.mnuSetWallpaper.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
 			this.mnuSetWallpaper.Size = new System.Drawing.Size(191, 22);
 			this.mnuSetWallpaper.Text = "Set &Wallpaper";
-			this.mnuSetWallpaper.Click += new System.EventHandler(this.button1_Click);
+			this.mnuSetWallpaper.Click += new System.EventHandler(this.selectImage_Click);
 			// 
 			// toolStripMenuItem2
 			// 
@@ -180,7 +180,7 @@
 			this.btnSendWallpaper.TabIndex = 8;
 			this.btnSendWallpaper.Text = "Send...";
 			this.btnSendWallpaper.UseVisualStyleBackColor = true;
-			this.btnSendWallpaper.Click += new System.EventHandler(this.button1_Click);
+			this.btnSendWallpaper.Click += new System.EventHandler(this.selectImage_Click);
 			// 
 			// notifyIcon
 			// 
@@ -210,7 +210,7 @@
 			this.mnuIcoSetWallpaper.Name = "mnuIcoSetWallpaper";
 			this.mnuIcoSetWallpaper.Size = new System.Drawing.Size(175, 22);
 			this.mnuIcoSetWallpaper.Text = "Set &Wallpaper";
-			this.mnuIcoSetWallpaper.Click += new System.EventHandler(this.button1_Click);
+			this.mnuIcoSetWallpaper.Click += new System.EventHandler(this.selectImage_Click);
 			// 
 			// toolStripMenuItem3
 			// 
