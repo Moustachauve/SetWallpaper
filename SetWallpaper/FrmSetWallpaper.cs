@@ -217,7 +217,7 @@ namespace SetWallpaper
 
 			bool isConnected = await m_client.ConnectAsync();
 
-			ConnectionFound(isConnected);
+			ConnectionFound();
 		}
 
 
@@ -227,18 +227,18 @@ namespace SetWallpaper
 
 		private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            bool isConnected = m_client.FindServer(m_client.Port);
+            m_client.FindServer(m_client.Port);
 
             if (InvokeRequired)
             {
                 this.BeginInvoke((MethodInvoker)delegate
                 {
-                    ConnectionFound(isConnected);
+                    ConnectionFound();
                 });
             }
             else
             {
-                ConnectionFound(isConnected);
+                ConnectionFound();
             }
 
         }
@@ -247,7 +247,7 @@ namespace SetWallpaper
 
 		#region Connection found
 
-		private void ConnectionFound(bool isConnected)
+		private void ConnectionFound()
 		{
 			pgbProgress.Visible = false;
 			mnuConnect.Enabled = true;
@@ -281,8 +281,6 @@ namespace SetWallpaper
 
 
 		#endregion
-
-		#region Client events
 
 		#region Command handler
 
@@ -332,6 +330,7 @@ namespace SetWallpaper
 			switch (e.Command.Type)
 			{
 				case NetworkCore.Commands.CommandType.Notification:
+					OnNotificationReceived((NotificationCommand)e.Command);
 					break;
 				case NetworkCore.Commands.CommandType.SetWallpaper:
 					OnWallpaperReceived((SetWallpaperCommand)e.Command);
@@ -370,6 +369,8 @@ namespace SetWallpaper
 		#endregion
 
 		#endregion
+
+		#region Client events
 
 		void m_client_OnDisconnected(object sender, AltarNet.TcpEventArgs e)
         {

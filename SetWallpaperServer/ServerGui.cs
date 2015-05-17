@@ -39,6 +39,21 @@ namespace SetWallpaperServer
 
 		void m_serverHandler_OnCommandReceived(object sender, CommandReceivedArgs e)
 		{
+			if(InvokeRequired)
+			{
+				BeginInvoke((MethodInvoker)delegate
+				{
+					OnCommandReceived(e);
+				});
+			}
+			else
+			{
+				OnCommandReceived(e);
+			}
+		}
+
+		void OnCommandReceived(CommandReceivedArgs e)
+		{
 			switch (e.Command.Type)
 			{
 				case CommandType.Notification:

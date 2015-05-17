@@ -222,8 +222,6 @@ namespace NetworkCore
 				OnCommandReceived(this, new CommandReceivedArgs(command, (User)e.Client.Tag));
 			}
 
-			SendCommand(command);
-
 		}
 
 		#endregion
