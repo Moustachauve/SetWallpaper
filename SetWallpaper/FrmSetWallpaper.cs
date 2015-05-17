@@ -15,7 +15,7 @@ using NetworkCore.Commands;
 
 namespace SetWallpaper
 {
-    public partial class Form1 : Form
+    public partial class FrmSetWallpaper : Form
 	{
 
 		#region Attributes
@@ -42,7 +42,7 @@ namespace SetWallpaper
 
 		#region Constructor
 
-		public Form1()
+		public FrmSetWallpaper()
         {
             InitializeComponent();
             UpdateUIState();
@@ -72,7 +72,7 @@ namespace SetWallpaper
 		{
 			if (!IsConnected)
 			{
-				new frmConnect(this).ShowDialog();
+				new FrmConnect(this).ShowDialog();
 			}
 			else
 			{

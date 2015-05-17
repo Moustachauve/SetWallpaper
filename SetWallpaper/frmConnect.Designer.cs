@@ -1,6 +1,6 @@
 ﻿namespace SetWallpaper
 {
-    partial class frmConnect
+    partial class FrmConnect
     {
         /// <summary>
         /// Required designer variable.

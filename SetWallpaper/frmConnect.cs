@@ -11,14 +11,14 @@ using System.Windows.Forms;
 
 namespace SetWallpaper
 {
-    public partial class frmConnect : Form
+    public partial class FrmConnect : Form
     {
         private bool m_ipOk;
         private bool m_portOk;
 
-        private Form1 m_parent;
+        private FrmSetWallpaper m_parent;
 
-        public frmConnect(Form1 parent)
+        public FrmConnect(FrmSetWallpaper parent)
         {
             InitializeComponent();
             m_parent = parent;
