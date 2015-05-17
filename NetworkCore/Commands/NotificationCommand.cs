@@ -22,7 +22,7 @@ namespace NetworkCore.Commands
 		public NotificationCommand(byte[] pData)
 			: base(CommandType.Notification)
 		{
-			Encoding.UTF8.GetString(pData, 1, pData.Length - 1);
+			m_text = Encoding.UTF8.GetString(pData, 1, pData.Length - 1);
 		}
 
 		internal override byte[] ToByteArray()

@@ -29,7 +29,7 @@ namespace NetworkCore.Commands
 
 			byte[] imageArr = new byte[pData.Length - 2];
 			Buffer.BlockCopy(pData, 2, imageArr, 0, pData.Length - 2);
-			Image image = (Bitmap)((new ImageConverter()).ConvertFrom(pData));
+			m_image = (Bitmap)((new ImageConverter()).ConvertFrom(pData));
 
 		}
 
