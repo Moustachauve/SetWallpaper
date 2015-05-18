@@ -179,6 +179,14 @@ namespace NetworkCore
 			}
 
 			SendCommand(new UserJoinedCommand(user));
+
+            List<User> users = new List<User>();
+
+            foreach(TcpClientInfo client in ConnectedClients) {
+                users.Add((User)client.Tag);
+            }
+
+            SendCommand(new UserListCommand(users), e.Client);
 		}
 
 		#endregion

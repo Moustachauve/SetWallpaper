@@ -43,6 +43,9 @@ namespace NetworkCore.Commands
 				case CommandType.UserLeft:
 					command = new UserLeftCommand(pData);
 					break;
+                case CommandType.UserList:
+                    command = new UserListCommand(pData);
+                    break;
 				default:
 					throw new EncoderFallbackException();
 			}

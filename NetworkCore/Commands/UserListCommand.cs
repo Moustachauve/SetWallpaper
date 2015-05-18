@@ -21,7 +21,7 @@ namespace NetworkCore.Commands
         internal UserListCommand(byte[] pData)
             : base(CommandType.UserList)
         {
-            int offset = 0;
+            int offset = 1;
 
             int listCount = CommandSerializer.DeserializeInt(pData, ref offset);
             m_userList = new List<User>(listCount);
