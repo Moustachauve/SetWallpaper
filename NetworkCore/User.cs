@@ -4,14 +4,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net;
+using NetworkCore.Commands;
 
 namespace NetworkCore
 {
 	public class User
-	{
-		#region Attributes
+    {
 
-		private IPAddress m_ip;
+        #region Static
+
+        internal static User FromByteArray(byte[] pData, ref int offset)
+        {
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(pData, offset, 4);
+
+            int userLenght = BitConverter.ToInt32(pData, 1);
+
+            offset += 4;
+
+            byte[] ipData = new byte[userLenght];
+            Buffer.BlockCopy(pData, offset, ipData, 0, userLenght);
+
+            IPAddress ip = new IPAddress(ipData);
+
+            offset += userLenght;
+
+            return new User(ip);
+        }
+
+        #endregion
+
+        #region Attributes
+
+        private IPAddress m_ip;
 
 		#endregion
 
@@ -34,14 +59,6 @@ namespace NetworkCore
 		{
 			m_ip = pIp;
 		}
-		internal User(byte[] pData, int offset)
-		{
-			byte[] ipData = new byte[pData.Length - offset];
-			Buffer.BlockCopy(pData, offset, ipData, 0, ipData.Length);
-
-			m_ip = new IPAddress(ipData);
-
-		}
 
 		#endregion
 
@@ -49,10 +66,15 @@ namespace NetworkCore
 
 		internal byte[] ToByteArray()
 		{
-			byte[] result = m_ip.GetAddressBytes();
-			return result;
+            byte[] result = m_ip.GetAddressBytes();
+
+            byte[] intBytes = BitConverter.GetBytes(result.Length);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(intBytes);
+			
+			return CommandSerializer.MergeByteArrays(intBytes, result);
 		}
 
 		#endregion
-	}
+    }
 }

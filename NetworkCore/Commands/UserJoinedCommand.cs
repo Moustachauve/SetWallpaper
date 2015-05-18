@@ -21,8 +21,9 @@ namespace NetworkCore.Commands
 		{
 			m_type = (CommandType)pData[0];
 
-			m_user = new User(pData, 1);
-		}
+            int offset = 1;
+            m_user = User.FromByteArray(pData, ref offset);
+        }
 
 		internal override byte[] ToByteArray()
 		{
