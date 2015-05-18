@@ -8,65 +8,81 @@ using NetworkCore.Commands;
 
 namespace NetworkCore
 {
-	public class User
+    public class User
     {
-
         #region Static
 
         internal static User FromByteArray(byte[] pData, ref int offset)
         {
             int userLength = CommandSerializer.DeserializeInt(pData, ref offset);
 
-            byte[] ipData = new byte[userLength];
-            Buffer.BlockCopy(pData, offset, ipData, 0, userLength);
+            byte[] IDData = new byte[16];
+            Buffer.BlockCopy(pData, offset, IDData, 0, 16);
+            Guid id = new Guid(IDData);
 
+            byte[] ipData = new byte[userLength - 16];
+            Buffer.BlockCopy(pData, offset + 16, ipData, 0, userLength - 16);
             IPAddress ip = new IPAddress(ipData);
 
             offset += userLength;
 
-            return new User(ip);
+            User user = new User(ip);
+            user.ID = id;
+
+            return user;
         }
 
         #endregion
 
         #region Attributes
 
+        private Guid m_id;
         private IPAddress m_ip;
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// Get the client Ip address
-		/// </summary>
-		public IPAddress Ip
-		{
-			get { return m_ip; }
-		}
+        /// <summary>
+        /// Get the client Ip address
+        /// </summary>
+        public IPAddress Ip
+        {
+            get { return m_ip; }
+        }
 
+        public Guid ID
+        {
+            get { return m_id; }
+            private set { m_id = value; }
+        }
 
-		#endregion
+        #endregion
 
-		#region Constructor
+        #region Constructor
 
-		public User(IPAddress pIp)
-		{
-			m_ip = pIp;
-		}
+        public User(IPAddress pIp)
+        {
+            m_ip = pIp;
+            m_id = Guid.NewGuid();
+        }
 
-		#endregion
+        #endregion
 
-		#region Serialize
+        #region Serialize
 
-		internal byte[] ToByteArray()
-		{
-            byte[] result = m_ip.GetAddressBytes();
+        internal byte[] ToByteArray()
+        {
+            byte[] ip = m_ip.GetAddressBytes();
+            byte[] guid = m_id.ToByteArray();
+
+            byte[] result = CommandSerializer.MergeByteArrays(guid, ip);
+
             byte[] intArr = CommandSerializer.Serialize(result.Length);
 
             return CommandSerializer.MergeByteArrays(intArr, result);
-		}
+        }
 
-		#endregion
+        #endregion
     }
 }

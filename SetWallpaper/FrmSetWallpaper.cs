@@ -22,6 +22,7 @@ namespace SetWallpaper
 
 		private ClientManager m_client;
         private Panel m_overlay;
+        private List<User> m_userList;
 
 		#endregion
 
@@ -340,6 +341,9 @@ namespace SetWallpaper
 				case NetworkCore.Commands.CommandType.UserLeft:
 					OnUserLeft((UserLeftCommand)e.Command);
 					break;
+                case NetworkCore.Commands.CommandType.UserList:
+                    OnUserListReceived((UserListCommand)e.Command);
+                    break;
 			}
 		}
 
@@ -373,14 +377,37 @@ namespace SetWallpaper
 
 		#endregion
 
+        #region OnUserListReceived
+
+        private void OnUserListReceived(UserListCommand pCommand)
+        {
+            m_userList = new List<User>(pCommand.UserList);
+            ShowCurrentlyConnected();
+        }
+
+        #endregion
+
 		#region OnUserJoined/Left
 		private void OnUserJoined(UserJoinedCommand pCommand)
 		{
 			logViewer.WriteLine(pCommand.User.Ip + " connected");
+            m_userList.Add(pCommand.User);
+            ShowCurrentlyConnected();
 		}
 		private void OnUserLeft(UserLeftCommand pCommand)
 		{
 			logViewer.WriteLine(pCommand.User.Ip + " disconnected");
+
+            for (int i = 0; i < m_userList.Count; i++)
+            {
+                if (m_userList[i].ID == pCommand.User.ID)
+                {
+                    m_userList.RemoveAt(i);
+                    break;
+                }
+            }
+
+            ShowCurrentlyConnected();
 		}
 
 		#endregion
@@ -415,6 +442,7 @@ namespace SetWallpaper
 
 			m_client = null;
 			UpdateUIState();
+            lsbConnected.Items.Clear();
 		}
 
 		#endregion
@@ -446,13 +474,13 @@ namespace SetWallpaper
 
 		#endregion
 
-		#endregion
+        #endregion
 
-		#endregion
+        #endregion
 
-		#region Drag&drop events
+        #region Drag&drop events
 
-		private void Form1_DragDrop(object sender, DragEventArgs e)
+        private void Form1_DragDrop(object sender, DragEventArgs e)
 		{
 			//e.Effect = DragDropEffects.Copy;
 			string[] FileList = (string[])e.Data.GetData(DataFormats.FileDrop, false);
@@ -493,6 +521,16 @@ namespace SetWallpaper
 		}
 
 		#endregion
+
+        private void ShowCurrentlyConnected()
+        {
+            lsbConnected.Items.Clear();
+
+            foreach (User user in m_userList)
+            {
+                lsbConnected.Items.Add(user);
+            }
+        }
 
     }
 }
