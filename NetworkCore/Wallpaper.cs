@@ -66,8 +66,8 @@ namespace NetworkCore
                     break;
             }
 
-            //if (!SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, tempPath, SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE))
-            //    throw new Win32Exception();
+            if (!SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, tempPath, SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE))
+                throw new Win32Exception();
         }
 
     }
