@@ -56,7 +56,6 @@
     <Compile Include="ClientManager.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandSerializer.cs" />
-    <Compile Include="Commands\Exceptions\InvalidCommandException.cs" />
     <Compile Include="Commands\NotificationCommand.cs" />
     <Compile Include="Control\LogViewer.cs">
       <SubType>Component</SubType>

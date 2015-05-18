@@ -42,7 +42,7 @@ namespace NetworkCore.Commands
 				case CommandType.UserLeft:
 					break;
 				default:
-					throw new InvalidCommandException();
+					throw new EncoderFallbackException();
 			}
 
 			return command;

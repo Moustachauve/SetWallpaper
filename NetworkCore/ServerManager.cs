@@ -205,7 +205,7 @@ namespace NetworkCore
 			{
 				command = CommandSerializer.DeserializeCommand(e.Data);
 			}
-			catch (InvalidCommandException ex)
+			catch (EncoderFallbackException ex)
 			{
 				if (OnCommandError != null)
 					OnCommandError(this, new TcpErrorEventArgs(e.Client, ex));
