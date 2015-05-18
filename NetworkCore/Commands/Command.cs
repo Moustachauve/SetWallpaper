@@ -13,6 +13,7 @@ namespace NetworkCore.Commands
 		SetWallpaper,
 		UserJoined,
 		UserLeft,
+        UserList
 	}
 
 	public abstract class Command

@@ -13,7 +13,7 @@ namespace NetworkCore.Commands
 		/// </summary>
 		/// <param name="pCommand">Command to be serialized</param>
 		/// <returns>Byte array representing the command</returns>
-		internal static byte[] SerializeCommand(Command pCommand) 
+		internal static byte[] Serialize(Command pCommand) 
 		{
 			return pCommand.ToByteArray();
 		}
@@ -84,5 +84,25 @@ namespace NetworkCore.Commands
 
 			return completeCommand;
 		}
+
+        internal static byte[] Serialize(int value)
+        {
+            byte[] intBytes = BitConverter.GetBytes(value);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(intBytes);
+            return intBytes;
+        }
+
+        internal static int DeserializeInt(byte[] pData, ref int offset)
+        {
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(pData, offset, 4);
+
+            int value = BitConverter.ToInt32(pData, offset);
+
+            offset += 4;
+
+            return value;
+        }
 	}
 }

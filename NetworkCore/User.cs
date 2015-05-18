@@ -15,19 +15,14 @@ namespace NetworkCore
 
         internal static User FromByteArray(byte[] pData, ref int offset)
         {
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(pData, offset, 4);
+            int userLength = CommandSerializer.DeserializeInt(pData, ref offset);
 
-            int userLenght = BitConverter.ToInt32(pData, 1);
-
-            offset += 4;
-
-            byte[] ipData = new byte[userLenght];
-            Buffer.BlockCopy(pData, offset, ipData, 0, userLenght);
+            byte[] ipData = new byte[userLength];
+            Buffer.BlockCopy(pData, offset, ipData, 0, userLength);
 
             IPAddress ip = new IPAddress(ipData);
 
-            offset += userLenght;
+            offset += userLength;
 
             return new User(ip);
         }
@@ -67,12 +62,9 @@ namespace NetworkCore
 		internal byte[] ToByteArray()
 		{
             byte[] result = m_ip.GetAddressBytes();
+            byte[] intArr = CommandSerializer.Serialize(result.Length);
 
-            byte[] intBytes = BitConverter.GetBytes(result.Length);
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(intBytes);
-			
-			return CommandSerializer.MergeByteArrays(intBytes, result);
+            return CommandSerializer.MergeByteArrays(intArr, result);
 		}
 
 		#endregion

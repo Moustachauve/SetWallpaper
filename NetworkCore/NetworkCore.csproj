@@ -59,6 +59,7 @@
     <Compile Include="Commands\NotificationCommand.cs" />
     <Compile Include="Commands\UserJoinedCommand.cs" />
     <Compile Include="Commands\UserLeftCommand.cs" />
+    <Compile Include="Commands\UserListCommand.cs" />
     <Compile Include="Control\LogViewer.cs">
       <SubType>Component</SubType>
     </Compile>
