@@ -34,6 +34,24 @@ namespace NetworkCore
 		{
 			m_ip = pIp;
 		}
+		internal User(byte[] pData, int offset)
+		{
+			byte[] ipData = new byte[pData.Length - offset];
+			Buffer.BlockCopy(pData, offset, ipData, 0, ipData.Length);
+
+			m_ip = new IPAddress(ipData);
+
+		}
+
+		#endregion
+
+		#region Serialize
+
+		internal byte[] ToByteArray()
+		{
+			byte[] result = m_ip.GetAddressBytes();
+			return result;
+		}
 
 		#endregion
 	}

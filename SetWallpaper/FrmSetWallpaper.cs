@@ -309,7 +309,6 @@ namespace SetWallpaper
 		#endregion
 
 		#region Command received
-		
 		void m_client_OnCommandReceived(object sender, CommandReceivedArgs e)
 		{
 			if (InvokeRequired)
@@ -334,6 +333,12 @@ namespace SetWallpaper
 					break;
 				case NetworkCore.Commands.CommandType.SetWallpaper:
 					OnWallpaperReceived((SetWallpaperCommand)e.Command);
+					break;
+				case NetworkCore.Commands.CommandType.UserJoined:
+					OnUserJoined((UserJoinedCommand)e.Command);
+					break;
+				case NetworkCore.Commands.CommandType.UserLeft:
+					OnUserLeft((UserLeftCommand)e.Command);
 					break;
 			}
 		}
@@ -367,6 +372,16 @@ namespace SetWallpaper
         }
 
 		#endregion
+
+		#region OnUserJoined/Left
+		private void OnUserJoined(UserJoinedCommand pCommand)
+		{
+			logViewer.WriteLine(pCommand.User.Ip + " connected");
+		}
+		private void OnUserLeft(UserLeftCommand pCommand)
+		{
+			logViewer.WriteLine(pCommand.User.Ip + " disconnected");
+		}
 
 		#endregion
 
@@ -428,6 +443,8 @@ namespace SetWallpaper
 			}
 		}
 
+
+		#endregion
 
 		#endregion
 

@@ -165,21 +165,20 @@ namespace NetworkCore
 		#region Event listeners
 
 		#region OnClientConnect
-
 		private void m_server_Connected(object sender, TcpEventArgs e)
 		{
 			IPAddress clientIp = ((IPEndPoint)e.Client.Client.Client.RemoteEndPoint).Address;
 
-			e.Client.Tag = new User(clientIp);
+			User user = new User(clientIp);
 
-
-			byte[] data = new byte[1];
-			data[0] = (byte)CommandType.UserJoined;
+			e.Client.Tag = user;
 
 			if (OnClientConnected != null)
 			{
 				OnClientConnected(this, e);
 			}
+
+			SendCommand(new UserJoinedCommand(user));
 		}
 
 		#endregion
@@ -192,6 +191,7 @@ namespace NetworkCore
 			{
 				OnClientDisonnected(this, e);
 			}
+			SendCommand(new UserLeftCommand((User)e.Client.Tag));
 		}
 
 		#endregion

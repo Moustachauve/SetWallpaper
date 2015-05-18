@@ -38,8 +38,10 @@ namespace NetworkCore.Commands
 					command = new SetWallpaperCommand(pData);
 					break;
 				case CommandType.UserJoined:
+					command = new UserJoinedCommand(pData);
 					break;
 				case CommandType.UserLeft:
+					command = new UserLeftCommand(pData);
 					break;
 				default:
 					throw new EncoderFallbackException();
